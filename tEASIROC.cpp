@@ -99,7 +99,6 @@ void convert(TString easirocfout){
 		teasiroc->GetEntry(i);
 		for (int ch = 0; ch < 64; ch++) {
 			easirocph[ch] = ((double)easirocadc[ch]-ped[ch])/gain[ch];
-
 		}
 		photon->Fill(easirocph[0]);
 		phtree->Fill();
@@ -121,6 +120,5 @@ void tEASIROC(int runnum){
 		f[i]= new TFile(easirocfout[i].Data(), "RECREATE");
 		loadeasiroc(easirocfinname[i],f[i],i);
 		convert(easirocfout[i]);
-
 	}
 }

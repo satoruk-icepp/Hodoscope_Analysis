@@ -6,9 +6,9 @@ Parent Directory/
 
 +src/--this file
 
-+data/
++data/--raw EASIROC file
 
-+rootfile/
++rootfile/--output of these programs
 
 At this point, you can analyze the data from two EASIROC modules.
 To extract the raw data, run "root "tEASIROC(<runnum>)"".
