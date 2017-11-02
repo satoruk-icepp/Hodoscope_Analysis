@@ -11,5 +11,10 @@ Parent Directory/
 +rootfile/--output of these programs
 
 At this point, you can analyze the data from two EASIROC modules.
+
 To extract the raw data, run "root "tEASIROC(<runnum>)"".
 Then you can find two files are created in rootfile/.
+
+Tasks
+- make the geometry the right position(modify channel assign)
+- make output file that contains the reconstruction.

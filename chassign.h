@@ -100,7 +100,7 @@ void EPHprocess(Double_t *EPH,int m){
         break;
 
         case 1:
-        EPH[i*16+j]=modarray(npe[i],0,j,true);
+        EPH[i*16+j]=modarray(npe[i],4,j,true);
         break;
 /*bundling error is taken into account*/
         case 2:
