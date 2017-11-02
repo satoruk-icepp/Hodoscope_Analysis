@@ -28,3 +28,4 @@ As for reconstruction, essential information is the angle because the number of 
 
 So the number of most essential parameters from the EASIROC side is four(two directions times two counters)
 These parameters are eventually compared with parameters from the HBU side.
+
