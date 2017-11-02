@@ -360,16 +360,16 @@ void tEASIROC(int runnum){
 	TString easirocfout[2];
 	TFile* f[2];
 	for (int i = 0; i < 2; i++) {
-		easirocfinname[i].Form("./data/hodoscope%dRaw_%05d.raw",i+1,runnum);
-		easirocfout[i].Form("./rootfile/easiroc_%d_%05d.root",i+1,runnum);
+		easirocfinname[i].Form("../data/hodoscope%dRaw_%05d.raw",i+1,runnum);
+		easirocfout[i].Form("../rootfile/easiroc_%d_%05d.root",i+1,runnum);
 		f[i]= new TFile(easirocfout[i].Data(), "RECREATE");
 		loadeasiroc(easirocfinname[i],f[i],i);
 		convert(easirocfout[i]);
 
 	}
-	mergeeasirocfout.Form("./rootfile/merge_easiroc_%05d.root",runnum);
-	mergeeasiroc(easirocfout,mergeeasirocfout);
-	//hbufinname.Form("./data/run%dahcal.txt",runnum);
+	//mergeeasirocfout.Form("../rootfile/merge_easiroc_%05d.root",runnum);
+	//mergeeasiroc(easirocfout,mergeeasirocfout);
+	//hbufinname.Form("../data/run%dahcal.txt",runnum);
 	//hbufout.Form("./rootfile/hbu%d.root",runnum);
 	//loadhbufromtxt(hbufinname,hbufout);
 
