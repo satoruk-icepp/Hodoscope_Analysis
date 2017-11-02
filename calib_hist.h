@@ -17,10 +17,10 @@ void calib_hist(TH1I *hist,int ch,int m){
 	Int_t fitmax;
 	//the second chip of the module ip15 is different from others
 	if(m==1&&ch>32){
-		defpedestal=815;
+		defpedestal=800;
 		defopegain=35;
-		fitmin=800;
-		fitmax=870;
+		fitmin=780;
+		fitmax=850;
 	}else{
 		defpedestal=800;
 		defopegain=35;
