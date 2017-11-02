@@ -17,4 +17,8 @@ Then you can find two files are created in rootfile/.
 
 Tasks
 - make the geometry the right position(modify channel assign)
-- make output file that contains the reconstruction.
+- make output file that contains the reconstruction
+- database of MPPC gain, MPPC pedestal, fiber gain
+- convert LCIO file to more easier format(for us)
+- make program to solve ambiguity
+- make program to determine the track
