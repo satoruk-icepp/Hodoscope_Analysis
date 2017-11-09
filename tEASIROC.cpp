@@ -41,24 +41,26 @@ void loadeasiroc(TString easirocfinname,TFile* f,int m){
 		if(val == 0xffff7368){
 			hoge.read((char*)&val, sizeof(int));//wordsize
 			//std::cout << "wordsize    "<<std::hex << val << std::endl;
+			
 			hoge.read((char*)&val, sizeof(int));//eventnum
-
-			val = val >> 16;
-			/*std::cout << "eventnum    "<<std::hex << val << std::endl;*/
-			tree->GetEntry(val);
+			val = (val >> 16) & 0x0fff;
+			//std::cout << "eventnum    "<<std::hex << val << std::endl;
+			//tree->GetEntry(val);
+			
 			hoge.read((char*)&val, sizeof(int));//cycle_num
-			cycle_num.push_back(val & 0x00ffffff);
-			//cycle_num.push_back(val & 0xffffffff);//old firmware
-			cycle = val & 0xffffffff;
-			/*std::cout << "cycle_num   "<<std::hex << val << std::endl;*/
+			cycle = val & 0x00ffffff;
+			cycle_num.push_back(cycle);
+			//cycle_num.push_back(val);//old firmware
+			//std::cout << "cycle_num   "<<std::hex << val << std::endl;
+			
 			hoge.read((char*)&val, sizeof(int));//tdc_val
-			tdc = val & 0xfffff;
-			tdc_val.push_back(val & 0x00ffffff);
-			//tdc_val.push_back(val & 0xfffff);//old firmware
-			cmd_1bit.push_back(val >> 31);
-			//cmd_1bit.push_back(val >> 20);
-			accept = val >> 20;
+			tdc = val & 0x00ffffff;
+			tdc_val.push_back(tdc);
+			//tdc_val.push_back(val & 0x000fffff);//old firmware
+			cmd_1bit.push_back((val >> 31) & 0x1);
+			accept = (val >> 31) & 0x1;
 			//std::cout << "tdc_val     "<<std::hex << val << std::endl;
+			
 			for(int i = 0; i<64; ++i){
 				hoge.read((char*)&val, sizeof(int));
 				//std::cout << std::hex << val << std::endl;
