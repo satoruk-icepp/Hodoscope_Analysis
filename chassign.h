@@ -1,120 +1,55 @@
 #include <math.h>
 #define PI 3.14159
-#define pitch 5.0
-#define fibernum 84
-#define mppcarray 16
-#define pixelnum 12
+#define PITCH 5.0
+#define NFIBER 84
+#define NCH 16
 
 /*recover dead channels*/
 void recvdead(Double_t *EPH){
   Double_t ephdead;
-  if (ch%16==0) {
-    ephdead=(EPH[ch+15]+EPH[ch+1])/2.;
-  }else if(ch%16==15){
-    ephdead=(EPH[ch-1]+EPH[ch-15])/2.;
-  }else{
-    ephdead=(EPH[ch-1]+EPH[ch+1])/2.;
-  }
+    ephdead=(EPH[(ch+NCH-1)%NCH]+EPH[(ch+1)%NCH])/2.;
+
   return ephdead;
 }
 
 /*extend the array to arbitrary length */
-Double_t extarr(Double_t array[16], int ch){
-  int i=ch%16;
+Double_t extarr(Double_t array[NCH], int ch){
+  int i=ch%NCH;
   return array[i];
 }
 
-/*to be editted*/
-int geometry(int i){
-  int cpos;
-  switch (i) {
+Int_t fib2chn(Int_t fiber, Int_t n, Int_t side) {
+  //n: AC=0, BD=1, EG=2, FH=3
+  //side: ABEF=0, CDGH=1
+  if (fiber==72 && n==1 && side==0) fiber=73;
+  else if (fiber==73 && n==1 && side==0) fiber=72;
+  else if (fiber==75 && n==1 && side==0) fiber=76;
+  else if (fiber==76 && n==1 && side==0) fiber=75;
+  switch(n) {
     case 0:
-    cpos=4;
-    break;
+      if (side==0)	return fiber%16;
+      else		return 31-fiber%16;
     case 1:
-    cpos=6;
-    break;
+      if (side==0)	return 47-fiber%16;
+      else		return 48+fiber%16;
     case 2:
-    cpos=8;
-    break;
+      if (side==0)	return fiber%16;
+      else		return 16+(fiber+12)%16;
     case 3:
-    cpos=2;
-    break;
-    default:
-    cpos=0;
-    break;
+      if (side==0)	return 47-fiber%16;
+      else		return 48+fiber%16;
   }
-  return cpos;
-}
-
-/*modify array (cyclic permutation, reverse)*/
-Double_t modarray(Double_t *array,int shift,int ch,Bool_t flag){
-  int revch,truech;
-  if (flag==true) {
-    revch=15-ch;
-  }else{
-    revch=ch;
-  }
-  truech=(revch+shift)%16;
-  Double_t value=array[truech];
-  return value;
+  return 0;
 }
 
 /*judge even number*/
 Bool_t eventrue(int i){
-  Bool_t even=true;
-  if (i%2==1) {
-    even=false;
-  }
-  return even;
+  return (i%2==0);
 }
 
-/*return position of fiber(ch0:0mm)*/
+/*return position of fiber(ch0:2.5mm)*/
 Double_t posfib(int ch){
-  int i = ch%16;
-  Double_t position=(i+0.5)*5.0;
+  int i = ch%NCH;
+  Double_t position=(i+0.5)*PITCH;
   return position;
-}
-
-/*modify the component of array based on geometry*/
-void EPHprocess(Double_t *EPH,int m){
-  Double_t npe[4][16]={{}};
-  for (int ch = 0; ch < 64; ch++) {
-    if (ch<16) {
-      npe[0][ch]  = EPH[ch];
-    }else if(ch<32){
-      npe[1][ch%16] = EPH[ch];
-    }else if(ch<48){
-      npe[2][ch%16] = EPH[ch];
-    }else{
-      npe[3][ch%16] = EPH[ch];
-    }
-  }
-  Double_t corEPH[64]={};
-  for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 16; j++) {
-      switch (i) {
-
-        case 0:
-        EPH[i*16+j]=modarray(npe[i],0,j,false);
-        break;
-
-        case 1:
-        EPH[i*16+j]=modarray(npe[i],4,j,true);
-        break;
-/*bundling error is taken into account*/
-        case 2:
-        if (m==0) {
-          EPH[i*16+j]=modarray(npe[i],0,j,false);
-        }else{
-          EPH[i*16+j]=modarray(npe[i],4,j,true);
-        }
-        break;
-
-        case 3:
-        EPH[i*16+j]=modarray(npe[i],0,j,true);
-        break;
-      }
-    }
-  }
 }
